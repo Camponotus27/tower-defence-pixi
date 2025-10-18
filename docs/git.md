@@ -1,4 +1,4 @@
-***
+
 // comprobar estado area de trabajo
 git status
 
@@ -14,5 +14,3 @@ git pull
 
 // emujar a remoto tus cambios locales
 git push
-
-***
