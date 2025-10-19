@@ -2,7 +2,6 @@ import { Sprite, Texture } from "pixi.js";
 
 import {
   randomBool,
-  randomFloat,
   randomInt,
 } from "../../../engine/utils/random";
 
@@ -34,9 +33,8 @@ export class Logo extends Sprite {
   }
 
   constructor() {
-    const tex = randomBool() ? "logo.svg" : "logo-white.svg";
-    super({ texture: Texture.from(tex), anchor: 0.5, scale: 0.25 });
+    const tex = randomBool() ? "Tower 02.png" : "Tower 03.png";
+    super({ texture: Texture.from(tex), anchor: 1, scale: 1.3});
     this.direction = randomInt(0, 3);
-    this.speed = randomFloat(1, 6);
   }
 }

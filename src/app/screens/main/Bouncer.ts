@@ -15,10 +15,10 @@ export class Bouncer {
 
   private allLogoArray: Logo[] = [];
   private activeLogoArray: Logo[] = [];
-  private yMin = -400;
-  private yMax = 400;
-  private xMin = -400;
-  private xMax = 400;
+  private yMin = -200;
+  private yMax = 200;
+  private xMin = -300;
+  private xMax = 300;
 
   public async show(screen: MainScreen): Promise<void> {
     this.screen = screen;
@@ -58,32 +58,11 @@ export class Bouncer {
 
   public update(): void {
     this.allLogoArray.forEach((entity) => {
-      this.setDirection(entity);
       this.setLimits(entity);
     });
   }
 
-  private setDirection(logo: Logo): void {
-    switch (logo.direction) {
-      case DIRECTION.NE:
-        logo.x += logo.speed;
-        logo.y -= logo.speed;
-        break;
-      case DIRECTION.NW:
-        logo.x -= logo.speed;
-        logo.y -= logo.speed;
-        break;
-      case DIRECTION.SE:
-        logo.x += logo.speed;
-        logo.y += logo.speed;
-        break;
-      case DIRECTION.SW:
-        logo.x -= logo.speed;
-        logo.y += logo.speed;
-        break;
-    }
-  }
-
+//"setLimits" establece limites solo al objeto en movimient0, es decir establece una pared de rebote
   private setLimits(logo: Logo): void {
     const { position, top, bottom, left, right } = logo;
     let { direction } = logo;
