@@ -1,3 +1,4 @@
+import { initDevtools } from "@pixi/devtools";
 import { setEngine } from "./app/getEngine";
 import { LoadScreen } from "./app/screens/LoadScreen";
 import { MainScreen } from "./app/screens/main/MainScreen";
@@ -12,6 +13,8 @@ import "@pixi/sound";
 
 // Create a new creation engine instance
 const engine = new CreationEngine();
+
+initDevtools({ app: engine });
 setEngine(engine);
 
 (async () => {
