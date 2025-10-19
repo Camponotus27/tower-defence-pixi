@@ -53,3 +53,5 @@ Este enfoque permite reforzar conceptos de programación orientada a objetos, re
 - Documentación de TypeScript → [typescriptlang.org](https://www.typescriptlang.org/)  
 - Sintaxis básica de Markdown → [MarkDown Guide](https://www.markdownguide.org/basic-syntax/)
 - Extension recomendada para visualizar archivos md → [MarkdownViewer](https://marketplace.visualstudio.com/items?itemName=MarkdownViewer.enhanced-md-editor)
+
+//hola
