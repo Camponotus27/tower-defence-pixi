@@ -152,7 +152,6 @@ export class Navigation {
       this.currentScreen.onLoad(100);
     }
 
-    console.log("this.currentScreen", this.currentScreen);
     // If there is a screen already created, hide and destroy it
     if (this.currentScreen) {
       await this.hideAndRemoveScreen(this.currentScreen);
