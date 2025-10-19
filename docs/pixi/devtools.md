@@ -15,7 +15,7 @@ Es una herramietas diseñada por pixi.js para poder manipilar elementos cuando l
 - Una vez instalado con el metodo de `plugin de Google Chrome`, tienes que ir a `impecionar` e ir a la pestaña `PixiJS DevTools`
 - Ahí podrás ver todos los elementos asociados a `pixi.js`, si jerarquía he incluso intervenir en los elemetos
 
-![devtools_1](./../media-recursos/devtools_1.png)
+![devtools_1](https://github.com/user-attachments/assets/fa417f6d-a0a2-4f4f-85a2-022ebfd14be2)
 
 ## PR asociado
 
