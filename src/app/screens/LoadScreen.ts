@@ -16,7 +16,7 @@ export class LoadScreen extends Container {
     super();
 
     this.progressBar = new CircularProgressBar({
-      backgroundColor: "#3d3d3d",
+      backgroundColor: "#252525ff",
       fillColor: "#e72264",
       radius: 100,
       lineWidth: 15,
