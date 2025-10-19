@@ -16,3 +16,7 @@ Es una herramietas diseñada por pixi.js para poder manipilar elementos cuando l
 - Ahí podrás ver todos los elementos asociados a `pixi.js`, si jerarquía he incluso intervenir en los elemetos
 
 ![devtools_1](./../media-recursos/devtools_1.png)
+
+## PR asociado
+
+- [devtools for pixi.js](https://github.com/Camponotus27/tower-defence-pixi/pull/3)
