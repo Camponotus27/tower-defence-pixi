@@ -1,0 +1,13 @@
+
+{
+  "recommendations": [
+    "bierner.markdown-mermaid",
+    "davidanson.vscode-markdownlint",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "markdownviewer.enhanced-md-editor", 
+    "pomdtr.markdown-kroki"
+],
+  "unwantedRecommendations": []
+}

@@ -38,6 +38,8 @@ Este enfoque permite reforzar conceptos de programación orientada a objetos, re
 - Instala dependencias `npm i`
 - Ejecuta el proyecto `npm run dev`
 
+- **Al abrir VS Code te sugerirá instalar extensiones recomendadas**
+
 ---
 
 ## 📘 Recursos y documentación útil
