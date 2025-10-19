@@ -29,12 +29,27 @@ Este enfoque permite reforzar conceptos de programación orientada a objetos, re
 - 🧾 Se priorizará una **documentación clara y completa**, de modo que el repositorio funcione también como una **guía de referencia**.  
 - 💬 La intención es fortalecer tanto las habilidades de **lógica y programación** como las de **comunicación técnica**, mediante la práctica de documentar cada avance.
 
+---
+
+## 🏃🏻‍♂️ Como correr el proyecto
+
+- Clonalo desde GitHub con el comando `git clone https://github.com/Camponotus27/tower-defence-pixi.git`
+- Una vez clonado, ingresa a la carpeta genera con `cd tower-defence-pixi`
+- Instala dependencias `npm i`
+- Ejecuta el proyecto `npm run dev`
 
 ---
 
 ## 📘 Recursos y documentación útil
 
+### Proyecto
+
+- Los comandos de arranque estan en el archivo `package.json`
+- La documentacion esta en `docs`
+
+### En linea
+
 - Guía oficial de Pixi.js → [pixijs.com](https://pixijs.com/8.x/guides/getting-started/intro)  
 - Documentación de TypeScript → [typescriptlang.org](https://www.typescriptlang.org/)  
 - Sintaxis básica de Markdown → [MarkDown Guide](https://www.markdownguide.org/basic-syntax/)
-
+- Extension recomendada para visualizar archivos md → [MarkdownViewer](https://marketplace.visualstudio.com/items?itemName=MarkdownViewer.enhanced-md-editor)
