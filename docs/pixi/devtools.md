@@ -15,4 +15,4 @@ Es una herramietas diseñada por pixi.js para poder manipilar elementos cuando l
 - Una vez instalado con la version de `plugin de Google Chrome`, tiene que ir a `impecionar` e ir a la pestaña `PixiJS DevTools`
 - Ahí podrás ver todos los elementos asociados a `pixi.js`, si jerarquía he incluso intervenir en ellos
 
-![devtools_1](docs/media-recursos/devtools_1.png)
+![devtools_1](./../media-recursos/devtools_1.png)
