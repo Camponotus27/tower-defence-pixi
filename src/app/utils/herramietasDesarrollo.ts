@@ -1,9 +1,9 @@
-import { Color, Container, PointData, Sprite, Texture } from 'pixi.js'
+import { Color, Container, PointData, Sprite, Texture } from "pixi.js";
 
 export function herramientaDesarrolloPintarPuntos(
   container: Container,
   puntos: PointData[],
-  color: 'red' | 'blue' | 'green',
+  color: "red" | "blue" | "green",
   tamañoPX: number,
 ) {
   puntos.forEach((punto) => {
@@ -15,6 +15,6 @@ export function herramientaDesarrolloPintarPuntos(
         width: tamañoPX,
         height: tamañoPX,
       }),
-    )
-  })
+    );
+  });
 }

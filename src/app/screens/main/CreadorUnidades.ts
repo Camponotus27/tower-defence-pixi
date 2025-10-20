@@ -15,13 +15,7 @@ export class CreadorUnidades {
   private contenedor: Container;
   private retrasoAparicionMS: number;
 
-  constructor({
-    contenedor,
-    camino,
-    unidad,
-    cantidad,
-    retrasoAparicionMS,
-  }: CreadorUnidadesProps) {
+  constructor({ contenedor, camino, unidad, cantidad, retrasoAparicionMS }: CreadorUnidadesProps) {
     this.retrasoAparicionMS = retrasoAparicionMS;
     this.contenedor = contenedor;
 
