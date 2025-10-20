@@ -1,20 +1,20 @@
 import { AnimatedSpriteFrames, Assets, Spritesheet, Texture } from 'pixi.js'
 
 export const getFrame = (
-  assetKey: string,
-  pattern: RegExp = /(\d+)\.aseprite$/, // patron de los nombres de
+  identificadorAssets: string,
+  patronNombreFrames: RegExp = /(\d+)\.aseprite$/,
 ): AnimatedSpriteFrames => {
-  const sheet = Assets.get<Spritesheet>(assetKey)
+  const sheet = Assets.get<Spritesheet>(identificadorAssets)
 
   if (!sheet) {
-    throw new Error(`Spritesheet "${assetKey}" no encontrado o no cargado.`)
+    throw new Error(`Spritesheet "${identificadorAssets}" no encontrado o no cargado.`)
   }
 
   const names = Object.keys(sheet.data.frames)
-    .filter((n) => pattern.test(n))
+    .filter((n) => patronNombreFrames.test(n))
     .sort((a, b) => {
-      const na = Number(a.match(pattern)?.[1] ?? 0)
-      const nb = Number(b.match(pattern)?.[1] ?? 0)
+      const na = Number(a.match(patronNombreFrames)?.[1] ?? 0)
+      const nb = Number(b.match(patronNombreFrames)?.[1] ?? 0)
       return na - nb
     })
 
