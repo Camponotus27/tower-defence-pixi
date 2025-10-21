@@ -9,7 +9,10 @@ import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
+import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
 import { Bouncer } from "./Bouncer";
+import { CreadorUnidades } from "./CreadorUnidades";
+import { Enemigo } from "./unidades/enemigo";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -22,6 +25,7 @@ export class MainScreen extends Container {
   private addButton: FancyButton;
   private removeButton: FancyButton;
   private bouncer: Bouncer;
+  private creadorEnemigos: CreadorUnidades;
   private paused = false;
 
   constructor() {
@@ -30,6 +34,28 @@ export class MainScreen extends Container {
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
     this.bouncer = new Bouncer();
+
+    //TODO: el camino seguramente será por nivel esto deberia ser el primer elemento de un array de "Nivel" o algo asi
+    const camino = [
+      { x: -600, y: 300 },
+      { x: -300, y: 200 },
+      { x: -200, y: 100 },
+      { x: -100, y: -100 },
+      { x: 200, y: 0 },
+    ];
+    herramientaDesarrolloPintarPuntos(this.mainContainer, camino, "red", 15);
+
+    this.creadorEnemigos = new CreadorUnidades({
+      contenedor: this.mainContainer,
+      cantidad: 10,
+      retrasoAparicionMS: 200,
+      unidad: Enemigo,
+      camino,
+    });
+
+    setTimeout(() => {
+      this.creadorEnemigos.generarGrupoUnidades();
+    }, 3000);
 
     const buttonAnimations = {
       hover: {
@@ -50,9 +76,7 @@ export class MainScreen extends Container {
       anchor: 0.5,
       animations: buttonAnimations,
     });
-    this.pauseButton.onPress.connect(() =>
-      engine().navigation.presentPopup(PausePopup),
-    );
+    this.pauseButton.onPress.connect(() => engine().navigation.presentPopup(PausePopup));
     this.addChild(this.pauseButton);
 
     this.settingsButton = new FancyButton({
@@ -60,9 +84,7 @@ export class MainScreen extends Container {
       anchor: 0.5,
       animations: buttonAnimations,
     });
-    this.settingsButton.onPress.connect(() =>
-      engine().navigation.presentPopup(SettingsPopup),
-    );
+    this.settingsButton.onPress.connect(() => engine().navigation.presentPopup(SettingsPopup));
     this.addChild(this.settingsButton);
 
     this.addButton = new Button({
@@ -86,9 +108,9 @@ export class MainScreen extends Container {
   public prepare() {}
 
   /** Update the screen */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(_time: Ticker) {
     if (this.paused) return;
+    this.creadorEnemigos.update(_time);
     this.bouncer.update();
   }
 
@@ -128,7 +150,7 @@ export class MainScreen extends Container {
 
   /** Show screen with animations */
   public async show(): Promise<void> {
-    engine().audio.bgm.play("main/sounds/bgm-main.mp3", { volume: 0.5 });
+    engine().audio.bgm.play("main/sounds/bgm-main.mp3", { volume: 0.1 });
 
     const elementsToAnimate = [
       this.pauseButton,
