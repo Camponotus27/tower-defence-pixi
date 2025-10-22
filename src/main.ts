@@ -12,12 +12,20 @@ import "@pixi/sound";
 // import "@esotericsoftware/spine-pixi-v8";
 
 // Create a new creation engine instance
+
+
+
+import { Application, Sprite, Assets} from 'pixi.js';
+
+
+
 const engine = new CreationEngine();
 
 initDevtools({ app: engine });
 setEngine(engine);
 
 (async () => {
+
   // Initialize the creation engine instance
   await engine.init({
     background: "#333333ff",

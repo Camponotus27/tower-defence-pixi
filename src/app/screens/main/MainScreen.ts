@@ -1,8 +1,8 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import type { Ticker } from "pixi.js";
-import { Container } from "pixi.js";
+import type { PointData, Ticker } from "pixi.js";
+import { Color, Container, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -10,9 +10,11 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
-import { Bouncer } from "./Bouncer";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { Enemigo } from "./unidades/enemigo";
+import { Torre } from "./Torre";
+
+interface ManejadorDeTorre { ubicacion: PointData; construido: Boolean }
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -24,7 +26,6 @@ export class MainScreen extends Container {
   private settingsButton: FancyButton;
   private addButton: FancyButton;
   private removeButton: FancyButton;
-  private bouncer: Bouncer;
   private creadorEnemigos: CreadorUnidades;
   private paused = false;
 
@@ -33,7 +34,37 @@ export class MainScreen extends Container {
 
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
-    this.bouncer = new Bouncer();
+
+    const manejadorDeTorres: ManejadorDeTorre[] = [
+      { ubicacion: { x: -400, y: -200 }, construido: false },
+      { ubicacion: { x: -300, y: -400 }, construido: false },
+      { ubicacion: { x: -100, y: -200 }, construido: false },
+      { ubicacion: { x: -300, y: -100 }, construido: false },
+      { ubicacion: { x: -200, y: -400 }, construido: false }]
+
+    manejadorDeTorres.forEach((manejador) => {
+      const newSprite: Sprite = new Sprite({
+        eventMode: "static",
+        texture: Texture.WHITE,
+        tint: new Color("red"),
+        width: 45,
+        height: 45,
+        position: manejador.ubicacion
+      });
+
+      newSprite.onclick = () => {
+        if (manejador.construido == true)
+          {
+            console.log("aqui ya hay una torre")
+            
+            return
+          }
+        this.mainContainer.addChild(new Torre(manejador.ubicacion));
+        manejador.construido = true;
+      }
+
+      this.mainContainer.addChild(newSprite);
+    });
 
     //TODO: el camino seguramente será por nivel esto deberia ser el primer elemento de un array de "Nivel" o algo asi
     const camino = [
@@ -92,7 +123,7 @@ export class MainScreen extends Container {
       width: 175,
       height: 110,
     });
-    this.addButton.onPress.connect(() => this.bouncer.add());
+    this.addButton.onPress.connect(() => { });
     this.addChild(this.addButton);
 
     this.removeButton = new Button({
@@ -100,18 +131,17 @@ export class MainScreen extends Container {
       width: 175,
       height: 110,
     });
-    this.removeButton.onPress.connect(() => this.bouncer.remove());
+    this.removeButton.onPress.connect(() => { });
     this.addChild(this.removeButton);
   }
 
   /** Prepare the screen just before showing */
-  public prepare() {}
+  public prepare() { }
 
   /** Update the screen */
   public update(_time: Ticker) {
     if (this.paused) return;
     this.creadorEnemigos.update(_time);
-    this.bouncer.update();
   }
 
   /** Pause gameplay - automatically fired when a popup is presented */
@@ -127,7 +157,7 @@ export class MainScreen extends Container {
   }
 
   /** Fully reset */
-  public reset() {}
+  public reset() { }
 
   /** Resize the screen, fired whenever window size changes */
   public resize(width: number, height: number) {
@@ -144,8 +174,6 @@ export class MainScreen extends Container {
     this.removeButton.y = height - 75;
     this.addButton.x = width / 2 + 100;
     this.addButton.y = height - 75;
-
-    this.bouncer.resize(width, height);
   }
 
   /** Show screen with animations */
@@ -170,11 +198,10 @@ export class MainScreen extends Container {
     }
 
     await finalPromise;
-    this.bouncer.show(this);
   }
 
   /** Hide screen with animations */
-  public async hide() {}
+  public async hide() { }
 
   /** Auto pause the app when window go out of focus */
   public blur() {
