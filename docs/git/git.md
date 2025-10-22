@@ -56,7 +56,7 @@ Ejemplo:
 git commit -m "Corrige error en el formulario de registro"
 ```
 
-Un *commit* representa un “paquete de cambios” con una descripción.
+Un _commit_ representa un “paquete de cambios” con una descripción.
 
 ---
 
@@ -198,6 +198,18 @@ Puedes ver los IDs de commit con:
 git log
 ```
 
+Guardar provisoriamente los cambioss en una pila interna
+
+```bash
+git stash
+```
+
+Recuperar lo guardado en `git stash`
+
+```bash
+git stash pop
+```
+
 ---
 
 ## 📦 8. Clonar un repositorio
@@ -258,10 +270,10 @@ Esto descarga el proyecto completo y crea una carpeta con el código.
 
 ## 💡 Consejos para trabajar en equipo
 
-- 🕐 **Haz `git pull` antes de comenzar a trabajar** para evitar conflictos.  
-- 🌱 **Usa ramas separadas** para cada tarea o función nueva.  
-- ✍️ **Escribe mensajes de commit claros y breves.**  
-- 🚫 **No subas archivos innecesarios** (como `node_modules` o temporales).  
+- 🕐 **Haz `git pull` antes de comenzar a trabajar** para evitar conflictos.
+- 🌱 **Usa ramas separadas** para cada tarea o función nueva.
+- ✍️ **Escribe mensajes de commit claros y breves.**
+- 🚫 **No subas archivos innecesarios** (como `node_modules` o temporales).
 - 🔎 **Revisa los cambios antes de subirlos:**
 
   ```bash
@@ -327,21 +339,21 @@ git push origin --delete nombre-de-la-rama
 
 ## 🧠 Glosario rápido
 
-| Término | Significado |
-|----------|--------------|
+| Término                | Significado                             |
+| ---------------------- | --------------------------------------- |
 | **Repositorio (repo)** | Carpeta del proyecto controlada por Git |
-| **Commit** | Registro de cambios con descripción |
-| **Rama (branch)** | Línea paralela de desarrollo |
-| **Merge** | Combinar ramas |
-| **Push** | Subir cambios al repositorio remoto |
-| **Pull** | Descargar cambios del remoto |
-| **Clone** | Copiar un proyecto remoto a tu PC |
-| **Pull Request (PR)** | Solicitud para fusionar ramas en GitHub |
+| **Commit**             | Registro de cambios con descripción     |
+| **Rama (branch)**      | Línea paralela de desarrollo            |
+| **Merge**              | Combinar ramas                          |
+| **Push**               | Subir cambios al repositorio remoto     |
+| **Pull**               | Descargar cambios del remoto            |
+| **Clone**              | Copiar un proyecto remoto a tu PC       |
+| **Pull Request (PR)**  | Solicitud para fusionar ramas en GitHub |
 
 ---
 
 ## 📘 Recursos útiles
 
-- [📖 Guía oficial de Git](https://git-scm.com/doc)  
-- [💻 Tutorial de GitHub](https://docs.github.com/es/get-started/quickstart)  
+- [📖 Guía oficial de Git](https://git-scm.com/doc)
+- [💻 Tutorial de GitHub](https://docs.github.com/es/get-started/quickstart)
 - [🌿 Simulador interactivo de Git](https://learngitbranching.js.org/?locale=es_ES)
