@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
 import type { PointData, Ticker } from "pixi.js";
-import { Color, Container, Sprite, Texture } from "pixi.js";
+import { Container } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -11,10 +11,14 @@ import { Button } from "../../ui/Button";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
-import { Enemigo } from "./unidades/enemigo";
 import { Torre } from "./Torre";
+import { BaseTorre } from "./unidades/baseTorre";
+import { Enemigo } from "./unidades/enemigo";
 
-interface ManejadorDeTorre { ubicacion: PointData; construido: Boolean }
+interface ManejadorDeTorre {
+  ubicacion: PointData;
+  construido: boolean;
+}
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -40,28 +44,24 @@ export class MainScreen extends Container {
       { ubicacion: { x: -300, y: -400 }, construido: false },
       { ubicacion: { x: -100, y: -200 }, construido: false },
       { ubicacion: { x: -300, y: -100 }, construido: false },
-      { ubicacion: { x: -200, y: -400 }, construido: false }]
+      { ubicacion: { x: -200, y: -400 }, construido: false },
+    ];
 
     manejadorDeTorres.forEach((manejador) => {
-      const newSprite: Sprite = new Sprite({
-        eventMode: "static",
-        texture: Texture.WHITE,
-        tint: new Color("red"),
-        width: 45,
-        height: 45,
-        position: manejador.ubicacion
-      });
+      const newSprite = new BaseTorre({});
+      newSprite.position = manejador.ubicacion;
+      newSprite.eventMode = "static";
+      newSprite.generate();
 
       newSprite.onclick = () => {
-        if (manejador.construido == true)
-          {
-            console.log("aqui ya hay una torre")
-            
-            return
-          }
+        if (manejador.construido == true) {
+          console.log("aqui ya hay una torre");
+
+          return;
+        }
         this.mainContainer.addChild(new Torre(manejador.ubicacion));
         manejador.construido = true;
-      }
+      };
 
       this.mainContainer.addChild(newSprite);
     });
@@ -123,7 +123,7 @@ export class MainScreen extends Container {
       width: 175,
       height: 110,
     });
-    this.addButton.onPress.connect(() => { });
+    this.addButton.onPress.connect(() => {});
     this.addChild(this.addButton);
 
     this.removeButton = new Button({
@@ -131,12 +131,12 @@ export class MainScreen extends Container {
       width: 175,
       height: 110,
     });
-    this.removeButton.onPress.connect(() => { });
+    this.removeButton.onPress.connect(() => {});
     this.addChild(this.removeButton);
   }
 
   /** Prepare the screen just before showing */
-  public prepare() { }
+  public prepare() {}
 
   /** Update the screen */
   public update(_time: Ticker) {
@@ -157,7 +157,7 @@ export class MainScreen extends Container {
   }
 
   /** Fully reset */
-  public reset() { }
+  public reset() {}
 
   /** Resize the screen, fired whenever window size changes */
   public resize(width: number, height: number) {
@@ -201,7 +201,7 @@ export class MainScreen extends Container {
   }
 
   /** Hide screen with animations */
-  public async hide() { }
+  public async hide() {}
 
   /** Auto pause the app when window go out of focus */
   public blur() {
