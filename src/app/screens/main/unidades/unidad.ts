@@ -1,10 +1,11 @@
-import { AnimatedSprite, AnimatedSpriteFrames, Container, PointData, Ticker } from "pixi.js";
+import { AnimatedSprite, Container, PointData, Ticker } from "pixi.js";
 import { Movimiento } from "../../../utils/movimiento";
-import { SeguidorDeCaminos } from "../../../utils/seguidorDeCaminos";
+import { SeguidorDeCaminos } from "../../../utils/SeguidorDeCaminos";
+import { getFrame } from "../../../utils/sprite";
 
 export interface UnidadProps {
   camino: PointData[];
-  frames?: AnimatedSpriteFrames;
+  framesJson?: string;
 }
 
 // Logica comun de una unidad, deberia ser capaz de moverse, atacar, morir, estar quieto, etc
@@ -14,12 +15,16 @@ export class Unidad extends Container {
   private movimiento: Movimiento;
   velocidad: number = 1;
   vida: number = 1000;
-  constructor({ camino, frames }: UnidadProps) {
+  constructor({ camino, framesJson }: UnidadProps) {
     super(); // esto llama al constructor de Container
 
     this.movimiento = new Movimiento(this.velocidad);
 
-    this.animateSrinte = new AnimatedSprite(frames || []);
+    if (!framesJson) {
+      throw new Error(`framesJson viene vacio.`);
+    }
+
+    this.animateSrinte = new AnimatedSprite(getFrame(framesJson));
     this.animateSrinte.animationSpeed = 10 / 60;
     this.animateSrinte.anchor.set(0.5);
     this.animateSrinte.visible = false;

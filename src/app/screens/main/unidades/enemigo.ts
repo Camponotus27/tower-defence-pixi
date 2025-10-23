@@ -1,20 +1,18 @@
-import { AnimatedSpriteFrames, PointData } from "pixi.js";
-import { getFrame } from "../../../utils/sprite";
+import { PointData } from "pixi.js";
 import { Unidad, UnidadProps } from "./unidad";
 
 export interface EnemigoProps {
   camino: PointData[];
-  frames?: AnimatedSpriteFrames;
+  framesJson?: string;
 }
 
 export class Enemigo extends Unidad {
   constructor(opciones: EnemigoProps) {
-    const frames: AnimatedSpriteFrames =
-      opciones.frames ?? getFrame("goblin scout - silhouette all animations-run.json");
+    const framesJson = opciones.framesJson ?? "goblin scout - silhouette all animations-run.json";
 
     const opcionesUnidad: UnidadProps = {
       camino: opciones.camino,
-      frames: frames,
+      framesJson,
     };
     super(opcionesUnidad); // Esto llama al constructor de Unidad
   }

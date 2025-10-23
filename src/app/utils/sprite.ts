@@ -2,6 +2,9 @@ import { AnimatedSpriteFrames, Assets, Spritesheet, Texture } from "pixi.js";
 
 type FrameRow = { filename: string };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cache: { [key: string]: any } = [];
+
 /**
  * Verifica si un valor tiene formato de array tipo Aseprite
  * (Ejemplo: [{ filename: "run #0.aseprite" }, ...])
@@ -19,8 +22,13 @@ const esArrayAseprite = (x: unknown): x is FrameRow[] => {
  */
 export const getFrame = (
   assetId: string,
-  patronNombreFrames: RegExp = /(\d+)\.aseprite$/,
+  patronNombreFrames: RegExp = /(\d+)\.(aseprite|png)$/,
 ): AnimatedSpriteFrames => {
+  const resultCac = cache[assetId];
+  if (resultCac) {
+    return resultCac;
+  }
+
   const sheet = Assets.get<Spritesheet>(assetId);
 
   if (!sheet) {
@@ -47,5 +55,8 @@ export const getFrame = (
       return sheet.textures[f.index] ?? sheet.textures[f.name];
     })
     .filter((t): t is Texture => t !== undefined);
+
+  // guardar en caché
+  cache[assetId] = textures;
   return textures;
 };
