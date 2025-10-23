@@ -10,9 +10,9 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
-import { Torre } from "./Torre";
 import { BaseTorre } from "./unidades/baseTorre";
 import { Enemigo } from "./unidades/enemigo";
+import { Torre } from "./unidades/Torre";
 
 interface ManejadorDeTorre {
   ubicacion: PointData;

@@ -1,5 +1,5 @@
 import { AnimatedSprite, Container, PointData } from "pixi.js";
-import { getFrame } from "../../utils/sprite";
+import { getFrame } from "../../../utils/sprite";
 
 export class Torre extends Container {
   public Asprite: AnimatedSprite;
