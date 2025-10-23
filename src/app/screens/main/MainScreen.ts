@@ -7,7 +7,6 @@ import { Container } from "pixi.js";
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
-import { Button } from "../../ui/Button";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
@@ -28,8 +27,7 @@ export class MainScreen extends Container {
   public mainContainer: Container;
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
-  private addButton: FancyButton;
-  private removeButton: FancyButton;
+
   private creadorEnemigos: CreadorUnidades;
   private paused = false;
 
@@ -54,12 +52,12 @@ export class MainScreen extends Container {
       newSprite.generate();
 
       newSprite.onclick = () => {
-        if (manejador.construido == true) {
+        if (manejador.construido === true) {
           console.log("aqui ya hay una torre");
-
           return;
         }
-        this.mainContainer.addChild(new Torre(manejador.ubicacion));
+
+        this.mainContainer.addChild(new Torre("Torre1.json", manejador.ubicacion));
         manejador.construido = true;
       };
 
@@ -117,22 +115,6 @@ export class MainScreen extends Container {
     });
     this.settingsButton.onPress.connect(() => engine().navigation.presentPopup(SettingsPopup));
     this.addChild(this.settingsButton);
-
-    this.addButton = new Button({
-      text: "Add",
-      width: 175,
-      height: 110,
-    });
-    this.addButton.onPress.connect(() => {});
-    this.addChild(this.addButton);
-
-    this.removeButton = new Button({
-      text: "Remove",
-      width: 175,
-      height: 110,
-    });
-    this.removeButton.onPress.connect(() => {});
-    this.addChild(this.removeButton);
   }
 
   /** Prepare the screen just before showing */
@@ -170,22 +152,13 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
-    this.removeButton.x = width / 2 - 100;
-    this.removeButton.y = height - 75;
-    this.addButton.x = width / 2 + 100;
-    this.addButton.y = height - 75;
   }
 
   /** Show screen with animations */
   public async show(): Promise<void> {
     engine().audio.bgm.play("main/sounds/bgm-main.mp3", { volume: 0.1 });
 
-    const elementsToAnimate = [
-      this.pauseButton,
-      this.settingsButton,
-      this.addButton,
-      this.removeButton,
-    ];
+    const elementsToAnimate = [this.pauseButton, this.settingsButton];
 
     let finalPromise!: AnimationPlaybackControls;
     for (const element of elementsToAnimate) {
