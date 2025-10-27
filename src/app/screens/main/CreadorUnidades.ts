@@ -27,7 +27,7 @@ export class CreadorUnidades {
       this.contenedor.addChild(nuevaUnidad);
     }
   }
-  public generarGrupoUnidades() {
+  public generarGrupoUnidades(): Unidad[] {
     let index = 1;
     this.unidades.forEach((unidad) => {
       setTimeout(() => {
@@ -35,6 +35,7 @@ export class CreadorUnidades {
       }, index * this.retrasoAparicionMS);
       index++;
     });
+    return this.unidades
   }
 
   public update(_time: Ticker) {
