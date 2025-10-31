@@ -9,11 +9,11 @@ import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
+import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { BaseTorre } from "./unidades/baseTorre";
 import { Enemigo } from "./unidades/enemigo";
 import { Torre } from "./unidades/Torre";
-import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
 import { Unidad } from "./unidades/unidad";
 
 interface ManejadorDeTorre {
@@ -132,17 +132,16 @@ export class MainScreen extends Container {
   }
 
   /** Prepare the screen just before showing */
-  public prepare() { }
+  public prepare() {}
 
   /** Update the screen */
   public update(_time: Ticker) {
     if (this.paused) return;
     this.creadorEnemigos.update(_time);
-    const unidad1: Unidad| undefined = (this.unidades)?this.unidades[9]: undefined;
-    console.log(this.proyectil, unidad1);
-    if(this.proyectil && unidad1){
+    const unidad1: Unidad | undefined = this.unidades ? this.unidades[9] : undefined;
+    if (this.proyectil && unidad1) {
       const llegoADestino = MoverUnTickHaciaTarget(1, this.proyectil, unidad1.position, _time, 10);
-      if(llegoADestino){
+      if (llegoADestino) {
         this.proyectil = undefined;
       }
     }
@@ -161,7 +160,7 @@ export class MainScreen extends Container {
   }
 
   /** Fully reset */
-  public reset() { }
+  public reset() {}
 
   /** Resize the screen, fired whenever window size changes */
   public resize(width: number, height: number) {
@@ -196,7 +195,7 @@ export class MainScreen extends Container {
   }
 
   /** Hide screen with animations */
-  public async hide() { }
+  public async hide() {}
 
   /** Auto pause the app when window go out of focus */
   public blur() {
@@ -205,4 +204,3 @@ export class MainScreen extends Container {
     }
   }
 }
-
