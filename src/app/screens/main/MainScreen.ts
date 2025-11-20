@@ -1,8 +1,8 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import type { PointData, Ticker } from "pixi.js";
-import { Color, Container, Sprite, Texture } from "pixi.js";
+import { PointData, Ticker } from "pixi.js";
+import { Color, Container, Graphics, Rectangle, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -48,6 +48,34 @@ export class MainScreen extends Container {
       { ubicacion: { x: -200, y: -100 }, construido: false },
       { ubicacion: { x: 200, y: -100 }, construido: false },
     ];
+    const circle = new Graphics();
+    circle.circle(0, 0, 15)
+    circle.fill("purple");
+
+    this.mainContainer.addChild(circle);
+
+
+    // Basic rectangle creation
+    const rect = new Rectangle(0, 0, 200, 150);
+    
+    // Use as container bounds
+    this.mainContainer.hitArea = new Rectangle(0, 0, 100, 100)
+    
+    // Check point containment
+    const isInside = rect.contains(circle.x, circle.y);    
+    // Manipulate dimensions
+    rect.width *= 2;
+    rect.height += 50;
+
+      const ticker = new Ticker();
+
+      ticker.add(() => {
+        if(isInside){
+          "esta colisionando"
+        }
+      });
+      // Start the ticker
+      ticker.start();
 
     manejadorDeTorres.forEach((manejador) => {
       const newSprite = new BaseTorre({});
@@ -125,6 +153,7 @@ export class MainScreen extends Container {
     this.settingsButton = new FancyButton({
       defaultView: "icon-settings.png",
       anchor: 0.5,
+
       animations: buttonAnimations,
     });
     this.settingsButton.onPress.connect(() => engine().navigation.presentPopup(SettingsPopup));
@@ -138,16 +167,16 @@ export class MainScreen extends Container {
   public update(_time: Ticker) {
     if (this.paused) return;
     this.creadorEnemigos.update(_time);
-    const unidad1: Unidad| undefined = (this.unidades)?this.unidades[9]: undefined;
-    console.log(this.proyectil, unidad1);
-    if(this.proyectil && unidad1){
+    const unidad1: Unidad | undefined = (this.unidades) ? this.unidades[9] : undefined;
+    //console.log(this.proyectil, unidad1);
+    if (this.proyectil && unidad1) {
       const llegoADestino = MoverUnTickHaciaTarget(1, this.proyectil, unidad1.position, _time, 10);
-      if(llegoADestino){
+      if (llegoADestino) {
         this.proyectil = undefined;
       }
     }
   }
-
+  
   /** Pause gameplay - automatically fired when a popup is presented */
   public async pause() {
     this.mainContainer.interactiveChildren = false;
