@@ -1,19 +1,19 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import { PointData, Ticker } from "pixi.js";
-import { Color, Container, Graphics, Rectangle, Sprite, Texture } from "pixi.js";
+import { Container, PointData, Rectangle, Ticker } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
+import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
+import { Proyectil } from "../../utils/Proyectil";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { BaseTorre } from "./unidades/baseTorre";
 import { Enemigo } from "./unidades/enemigo";
 import { Torre } from "./unidades/Torre";
-import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
 import { Unidad } from "./unidades/unidad";
 
 interface ManejadorDeTorre {
@@ -32,11 +32,13 @@ export class MainScreen extends Container {
 
   private creadorEnemigos: CreadorUnidades;
   private paused = false;
-  public proyectil: Sprite | undefined;
+  public proyectiles: Proyectil[];
   public unidades!: Unidad[];
 
   constructor() {
     super();
+
+    this.proyectiles = [];
 
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
@@ -48,34 +50,6 @@ export class MainScreen extends Container {
       { ubicacion: { x: -200, y: -100 }, construido: false },
       { ubicacion: { x: 200, y: -100 }, construido: false },
     ];
-    const circle = new Graphics();
-    circle.circle(0, 0, 15)
-    circle.fill("purple");
-
-    this.mainContainer.addChild(circle);
-
-
-    // Basic rectangle creation
-    const rect = new Rectangle(0, 0, 200, 150);
-    
-    // Use as container bounds
-    this.mainContainer.hitArea = new Rectangle(0, 0, 100, 100)
-    
-    // Check point containment
-    const isInside = rect.contains(circle.x, circle.y);    
-    // Manipulate dimensions
-    rect.width *= 2;
-    rect.height += 50;
-
-      const ticker = new Ticker();
-
-      ticker.add(() => {
-        if(isInside){
-          "esta colisionando"
-        }
-      });
-      // Start the ticker
-      ticker.start();
 
     manejadorDeTorres.forEach((manejador) => {
       const newSprite = new BaseTorre({});
@@ -93,14 +67,9 @@ export class MainScreen extends Container {
         manejador.construido = true;
         engine().audio.sfx.play("main/sounds/sfx-hover.wav", { volume: 0.6 });
 
-        this.proyectil = new Sprite({
-          texture: Texture.WHITE,
-          position: { x: 1, y: -100 },
-          tint: new Color("yellow"),
-          width: 20,
-          height: 20,
-        });
-        this.mainContainer.addChild(this.proyectil);
+        const proyectil = new Proyectil({ origen: newSprite.position });
+        this.proyectiles.push(proyectil);
+        this.mainContainer.addChild(proyectil.sprite);
       };
 
       this.mainContainer.addChild(newSprite);
@@ -127,6 +96,44 @@ export class MainScreen extends Container {
     setTimeout(() => {
       this.unidades = this.creadorEnemigos.generarGrupoUnidades();
     }, 3000);
+
+    // Area de colision
+    let colisionX = camino[4].x;
+    let colisionY = camino[4].y;
+    let colisionSize = 40;
+
+    const rect = new Rectangle(
+      colisionX - colisionSize / 2,
+      colisionY - colisionSize / 2,
+      colisionSize,
+      colisionSize,
+    );
+
+    herramientaDesarrolloPintarPuntos(
+      this.mainContainer,
+      [{ x: colisionX, y: colisionY }],
+      "green",
+      colisionSize,
+    );
+
+    const ticker = new Ticker();
+
+    ticker.add(() => {
+      // Checkea si esta conlisionando o no
+      console.log(this.unidades);
+      // si no existe this.uniades, llega hasta esta linea durante este tick
+      if (!this.unidades) return;
+
+      this.unidades.forEach((unidad) => {
+        const estaColisionando = rect.contains(unidad.x, unidad.y);
+        if (estaColisionando) {
+          // onCollitionEnter
+          unidad.visible = false;
+        }
+      });
+    });
+    // Start the ticker
+    ticker.start();
 
     const buttonAnimations = {
       hover: {
@@ -161,22 +168,29 @@ export class MainScreen extends Container {
   }
 
   /** Prepare the screen just before showing */
-  public prepare() { }
+  public prepare() {}
 
   /** Update the screen */
   public update(_time: Ticker) {
     if (this.paused) return;
     this.creadorEnemigos.update(_time);
-    const unidad1: Unidad | undefined = (this.unidades) ? this.unidades[9] : undefined;
-    //console.log(this.proyectil, unidad1);
-    if (this.proyectil && unidad1) {
-      const llegoADestino = MoverUnTickHaciaTarget(1, this.proyectil, unidad1.position, _time, 10);
-      if (llegoADestino) {
-        this.proyectil = undefined;
+    const unidad1: Unidad | undefined = this.unidades ? this.unidades[9] : undefined;
+    this.proyectiles.forEach((proyectil) => {
+      if (unidad1) {
+        const llegoADestino = MoverUnTickHaciaTarget(
+          1,
+          proyectil.sprite,
+          unidad1.position,
+          _time,
+          10,
+        );
+        if (llegoADestino) {
+          proyectil.Destruye();
+        }
       }
-    }
+    });
   }
-  
+
   /** Pause gameplay - automatically fired when a popup is presented */
   public async pause() {
     this.mainContainer.interactiveChildren = false;
@@ -190,7 +204,7 @@ export class MainScreen extends Container {
   }
 
   /** Fully reset */
-  public reset() { }
+  public reset() {}
 
   /** Resize the screen, fired whenever window size changes */
   public resize(width: number, height: number) {
@@ -225,7 +239,7 @@ export class MainScreen extends Container {
   }
 
   /** Hide screen with animations */
-  public async hide() { }
+  public async hide() {}
 
   /** Auto pause the app when window go out of focus */
   public blur() {
@@ -234,4 +248,3 @@ export class MainScreen extends Container {
     }
   }
 }
-
