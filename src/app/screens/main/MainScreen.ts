@@ -7,6 +7,8 @@ import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 
+import { EditableMaps } from "../../../core/maps/EditableMaps";
+import { PauseResumeOption } from "../../../engine/navigation/navigation";
 import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
 import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
 import { CreadorUnidades } from "./CreadorUnidades";
@@ -28,17 +30,22 @@ export class MainScreen extends Container {
   public mainContainer: Container;
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
+  private editMapButton: FancyButton;
 
   private creadorEnemigos: CreadorUnidades;
   private paused = false;
   public proyectil: Sprite | undefined;
   public unidades!: Unidad[];
 
+  public editableMaps: EditableMaps;
+
   constructor() {
     super();
 
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
+
+    this.editableMaps = new EditableMaps(this);
 
     const graphics = new Graphics();
     graphics.circle(0, 0, 30);
@@ -63,7 +70,6 @@ export class MainScreen extends Container {
       } else {
         star.visible = false;
       }
-      console.log(star._position);
       star.moveTo(60, 0);
     });
     ticker.start();
@@ -156,6 +162,17 @@ export class MainScreen extends Container {
     });
     this.settingsButton.onPress.connect(() => engine().navigation.presentPopup(SettingsPopup));
     this.addChild(this.settingsButton);
+
+    this.editMapButton = new FancyButton({
+      defaultView: "icon-pause.png",
+      anchor: 0.5,
+      animations: buttonAnimations,
+    });
+    this.editMapButton.onPress.connect(() => {
+      const isEditing = this.editableMaps.toggleEdit();
+      this.editMapButton.defaultView = isEditing ? "icon-settings.png" : "icon-pause.png";
+    });
+    this.addChild(this.editMapButton);
   }
 
   /** Prepare the screen just before showing */
@@ -175,14 +192,18 @@ export class MainScreen extends Container {
   }
 
   /** Pause gameplay - automatically fired when a popup is presented */
-  public async pause() {
-    this.mainContainer.interactiveChildren = false;
+  public async pause({ ignoreInteractiveChildren = false }: PauseResumeOption = {}) {
+    if (!ignoreInteractiveChildren) {
+      this.mainContainer.interactiveChildren = false;
+    }
     this.paused = true;
   }
 
   /** Resume gameplay */
-  public async resume() {
-    this.mainContainer.interactiveChildren = true;
+  public async resume({ ignoreInteractiveChildren = false }: PauseResumeOption = {}) {
+    if (!ignoreInteractiveChildren) {
+      this.mainContainer.interactiveChildren = true;
+    }
     this.paused = false;
   }
 
@@ -200,6 +221,8 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
+    this.editMapButton.x = width - 30;
+    this.editMapButton.y = 90;
   }
 
   /** Show screen with animations */
