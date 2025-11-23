@@ -1,7 +1,8 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import { Container, PointData, Rectangle, Ticker } from "pixi.js";
+import type { PointData, Ticker } from "pixi.js";
+import { Color, Container, Graphics, Rectangle, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -43,7 +44,40 @@ export class MainScreen extends Container {
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
 
+    const graphics = new Graphics();
+    graphics.circle(0, 0, 30);
+    graphics.stroke({ width: 4, color: "purple" });
+    graphics.fill("purple");
+
+    this.mainContainer.addChild(graphics);
+
+    const star = new Graphics();
+    star.star(0, 0, 5, 15);
+    star.fill("white");
+    const containerStar = new Container();
+    containerStar.position.set(60, 0);
+    containerStar.addChild(star);
+
+    this.mainContainer.addChild(containerStar);
+
+    const ticker = new Ticker();
+    ticker.add(() => {
+      if (graphics.containsPoint(containerStar.position)) {
+        star.visible = true;
+      } else {
+        star.visible = false;
+      }
+      console.log(star._position);
+      star.moveTo(60, 0);
+    });
+    ticker.start();
+
     const manejadorDeTorres: ManejadorDeTorre[] = [
+      { ubicacion: { x: 1, y: -100 }, construido: false },
+      { ubicacion: { x: 100, y: 50 }, construido: false },
+      { ubicacion: { x: -100, y: 50 }, construido: false },
+      { ubicacion: { x: -200, y: -100 }, construido: false },
+      { ubicacion: { x: 200, y: -100 }, construido: false },
       { ubicacion: { x: 1, y: -100 }, construido: false },
       { ubicacion: { x: 100, y: 50 }, construido: false },
       { ubicacion: { x: -100, y: 50 }, construido: false },
@@ -70,6 +104,16 @@ export class MainScreen extends Container {
         const proyectil = new Proyectil({ origen: newSprite.position });
         this.proyectiles.push(proyectil);
         this.mainContainer.addChild(proyectil.sprite);
+        engine().audio.sfx.play("main/sounds/sfx-hover.wav", { volume: 0.6 });
+
+        this.proyectil = new Sprite({
+          texture: Texture.WHITE,
+          position: { x: 1, y: -100 },
+          tint: new Color("yellow"),
+          width: 20,
+          height: 20,
+        });
+        this.mainContainer.addChild(this.proyectil);
       };
 
       this.mainContainer.addChild(newSprite);
@@ -94,6 +138,7 @@ export class MainScreen extends Container {
     });
 
     setTimeout(() => {
+      this.unidades = this.creadorEnemigos.generarGrupoUnidades();
       this.unidades = this.creadorEnemigos.generarGrupoUnidades();
     }, 3000);
 
