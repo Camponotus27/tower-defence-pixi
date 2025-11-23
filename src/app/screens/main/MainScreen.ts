@@ -52,7 +52,7 @@ export class MainScreen extends Container {
     ];
 
     manejadorDeTorres.forEach((manejador) => {
-      const newSprite = new BaseTorre({});
+      const newSprite = new BaseTorre();
       newSprite.position = manejador.ubicacion;
       newSprite.eventMode = "static";
       newSprite.generate();
@@ -119,16 +119,12 @@ export class MainScreen extends Container {
     const ticker = new Ticker();
 
     ticker.add(() => {
-      // Checkea si esta conlisionando o no
-      console.log(this.unidades);
-      // si no existe this.uniades, llega hasta esta linea durante este tick
       if (!this.unidades) return;
 
       this.unidades.forEach((unidad) => {
         const estaColisionando = rect.contains(unidad.x, unidad.y);
         if (estaColisionando) {
-          // onCollitionEnter
-          unidad.visible = false;
+          unidad.destruye();
         }
       });
     });
@@ -185,7 +181,7 @@ export class MainScreen extends Container {
           10,
         );
         if (llegoADestino) {
-          proyectil.Destruye();
+          proyectil.destruye();
         }
       }
     });

@@ -20,7 +20,7 @@ export class Proyectil {
     });
   }
 
-  public Destruye() {
+  public destruye() {
     this.sprite.visible = false;
     this.sprite.position = this.origen;
   }
