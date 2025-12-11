@@ -6,6 +6,7 @@ import { BaseTorre } from "./unidades/BaseTorre";
 import { Enemigo } from "./unidades/Enemigo";
 import { Proyectil } from "./unidades/Proyectil";
 import { Torre } from "./unidades/Torre";
+import { Unidad } from "./unidades/Unidad";
 
 interface ManejadorDeTorre {
   ubicacion: PointData;
@@ -56,10 +57,14 @@ export class AdministradorJuego {
       contenedor: this.contenedorJuegoPrincipal,
       cantidadReservaInicial: 10,
       fabrica: () => {
-        return new Enemigo(this.contenedorJuegoPrincipal, {
-          opcionesSeguidorDeObjetivos: { objetivos: camino, variacion: 10, velocidad: 0.5 },
+        const nuevoEnemigo = new Enemigo(this.contenedorJuegoPrincipal, {
+          opcionesSeguidorDeObjetivos: { objetivos: camino, variacion: 10, velocidad: 0.3 },
           vida: 100,
         });
+        nuevoEnemigo.onDestruye = () => {
+          this.removerseComoObjetivoDeLosProyectiles(nuevoEnemigo);
+        };
+        return nuevoEnemigo;
       },
     });
 
@@ -103,6 +108,16 @@ export class AdministradorJuego {
       this.contenedorJuegoPrincipal.addChild(baseTorre);
     });
   }
+
+  private removerseComoObjetivoDeLosProyectiles = (unidad: Unidad) => {
+    const proyectilesActivados = this.creadorProyectiles.obtenerUnidades();
+    proyectilesActivados.forEach((proyectil) => {
+      if (proyectil.seguidorDeObjetivos?.obtenerUnidadFinal() === unidad) {
+        // TODO quizas deberia llegar al ultim lugar donde estaba el objetivo
+        proyectil.destruye();
+      }
+    });
+  };
 
   public update(_time: Ticker) {
     // actualiza todas las unidades hechas por cada Creador de Unidades
