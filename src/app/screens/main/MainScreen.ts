@@ -87,7 +87,7 @@ export class MainScreen extends Container {
       },
     });
 
-    this.creadorEnemigos.generarGrupoUnidadesActivas(8, 4000);
+    this.creadorEnemigos.generarGrupoUnidadesActivas(30, 800);
 
     this.creadorTorres = new CreadorUnidades<Torre>({
       contenedor: this.mainContainer,
