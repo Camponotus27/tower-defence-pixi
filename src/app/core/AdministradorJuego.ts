@@ -1,5 +1,6 @@
 import { Container, PointData, Ticker } from "pixi.js";
 import { engine } from "../getEngine";
+import { MonedasUI } from "../ui/game/MonedasUI";
 import { herramientaDesarrolloPintarPuntos } from "../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { BaseTorre } from "./unidades/BaseTorre";
@@ -7,7 +8,6 @@ import { Enemigo } from "./unidades/Enemigo";
 import { Proyectil } from "./unidades/Proyectil";
 import { Torre } from "./unidades/Torre";
 import { Unidad } from "./unidades/Unidad";
-
 
 interface ManejadorDeTorre {
   ubicacion: PointData;
@@ -37,9 +37,11 @@ export class AdministradorJuego {
   private contenedorJuegoPrincipal: Container;
 
   public monedas: number = 100;
+  private monedasUI: MonedasUI;
 
-  constructor(mainContainerScreen: Container) {
+  constructor(mainContainerScreen: Container, monedasUI: MonedasUI) {
     this.contenedorJuegoPrincipal = mainContainerScreen;
+    this.monedasUI = monedasUI;
 
     herramientaDesarrolloPintarPuntos(this.contenedorJuegoPrincipal, camino, "red", 15);
 
@@ -100,7 +102,7 @@ export class AdministradorJuego {
           console.log("aqui ya hay una torre");
           return;
         }
-        if (this.monedas < 100){
+        if (this.monedas < 100) {
           console.log("no tienes suficientes monedas");
           return;
         }
@@ -110,7 +112,7 @@ export class AdministradorJuego {
         torre.generate();
 
         manejador.construido = true;
-        if (manejador.construido === true){
+        if (manejador.construido === true) {
           this.monedas -= 100;
         }
         engine().audio.sfx.play("main/sounds/sfx-hover.wav", { volume: 0.6 });
@@ -135,6 +137,7 @@ export class AdministradorJuego {
     this.creadorEnemigos.update(_time);
     this.creadorTorres.update(_time);
     this.creadorProyectiles.update(_time);
+
+    this.monedasUI.asignarMonedas(this.monedas);
   }
-  
 }
