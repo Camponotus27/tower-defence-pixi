@@ -275,37 +275,6 @@
         },
         {
           "alias": [
-            "main/unidades/torres/suelo-torre.json",
-            "suelo-torre.json"
-          ],
-          "src": [
-            "main/unidades/torres/suelo-torre.json"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "main/unidades/torres/suelo-torre.png",
-            "suelo-torre.png"
-          ],
-          "src": [
-            "main/unidades/torres/suelo-torre@0.5x.webp",
-            "main/unidades/torres/suelo-torre@0.5x.png",
-            "main/unidades/torres/suelo-torre.webp",
-            "main/unidades/torres/suelo-torre.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
             "main/unidades/torres/Torre1.json",
             "Torre1.json"
           ],
@@ -328,6 +297,37 @@
             "main/unidades/torres/Torre1@0.5x.png",
             "main/unidades/torres/Torre1.webp",
             "main/unidades/torres/Torre1.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "main/unidades/torres/suelo-torre.json",
+            "suelo-torre.json"
+          ],
+          "src": [
+            "main/unidades/torres/suelo-torre.json"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "main/unidades/torres/suelo-torre.png",
+            "suelo-torre.png"
+          ],
+          "src": [
+            "main/unidades/torres/suelo-torre@0.5x.webp",
+            "main/unidades/torres/suelo-torre@0.5x.png",
+            "main/unidades/torres/suelo-torre.webp",
+            "main/unidades/torres/suelo-torre.png"
           ],
           "data": {
             "tags": {
