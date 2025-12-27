@@ -1,7 +1,7 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import { Color, Container, Graphics, PointData, Sprite, Texture, Ticker } from "pixi.js";
+import { Container, Ticker } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -9,18 +9,9 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 
 import { EditableMaps } from "../../../core/maps/EditableMaps";
 import { PauseResumeOption } from "../../../engine/navigation/navigation";
-import { herramientaDesarrolloPintarPuntos } from "../../utils/herramietasDesarrollo";
-import { MoverUnTickHaciaTarget } from "../../utils/movimiento";
-import { CreadorUnidades } from "./CreadorUnidades";
-import { BaseTorre } from "./unidades/baseTorre";
-import { Enemigo } from "./unidades/enemigo";
-import { Torre } from "./unidades/Torre";
-import { Unidad } from "./unidades/unidad";
-
-interface ManejadorDeTorre {
-  ubicacion: PointData;
-  construido: boolean;
-}
+import { AdministradorJuego } from "../../core/AdministradorJuego";
+import { CargadorJsonNivel } from "../../core/niveles/cargador/CargadorJsonNivel";
+import { MonedasUI } from "../../ui/game/MonedasUI";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -30,12 +21,12 @@ export class MainScreen extends Container {
   public mainContainer: Container;
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
+  private contenedorMonedas: MonedasUI;
+
+  private administradorJuego!: AdministradorJuego;
   private editMapButton: FancyButton;
 
-  private creadorEnemigos: CreadorUnidades;
   private paused = false;
-  public proyectil: Sprite | undefined;
-  public unidades!: Unidad[];
 
   public editableMaps: EditableMaps;
 
@@ -47,91 +38,8 @@ export class MainScreen extends Container {
 
     this.editableMaps = new EditableMaps(this);
 
-    const graphics = new Graphics();
-    graphics.circle(0, 0, 30);
-    graphics.stroke({ width: 4, color: "purple" });
-    graphics.fill("purple");
-
-    this.mainContainer.addChild(graphics);
-
-    const star = new Graphics();
-    star.star(0, 0, 5, 15);
-    star.fill("white");
-    const containerStar = new Container();
-    containerStar.position.set(60, 0);
-    containerStar.addChild(star);
-
-    this.mainContainer.addChild(containerStar);
-
-    const ticker = new Ticker();
-    ticker.add(() => {
-      if (graphics.containsPoint(containerStar.position)) {
-        star.visible = true;
-      } else {
-        star.visible = false;
-      }
-      star.moveTo(60, 0);
-    });
-    ticker.start();
-
-    const manejadorDeTorres: ManejadorDeTorre[] = [
-      { ubicacion: { x: 1, y: -100 }, construido: false },
-      { ubicacion: { x: 100, y: 50 }, construido: false },
-      { ubicacion: { x: -100, y: 50 }, construido: false },
-      { ubicacion: { x: -200, y: -100 }, construido: false },
-      { ubicacion: { x: 200, y: -100 }, construido: false },
-    ];
-
-    manejadorDeTorres.forEach((manejador) => {
-      const newSprite = new BaseTorre({});
-      newSprite.position = manejador.ubicacion;
-      newSprite.eventMode = "static";
-      newSprite.generate();
-
-      newSprite.onclick = () => {
-        if (manejador.construido === true) {
-          console.log("aqui ya hay una torre");
-          return;
-        }
-
-        this.mainContainer.addChild(new Torre("Torre1.json", manejador.ubicacion));
-        manejador.construido = true;
-        engine().audio.sfx.play("main/sounds/sfx-hover.wav", { volume: 0.6 });
-
-        this.proyectil = new Sprite({
-          texture: Texture.WHITE,
-          position: { x: 1, y: -100 },
-          tint: new Color("yellow"),
-          width: 20,
-          height: 20,
-        });
-        this.mainContainer.addChild(this.proyectil);
-      };
-
-      this.mainContainer.addChild(newSprite);
-    });
-
-    //TODO: el camino seguramente será por nivel esto deberia ser el primer elemento de un array de "Nivel" o algo asi
-    const camino = [
-      { x: -600, y: 300 },
-      { x: -300, y: 200 },
-      { x: -200, y: 100 },
-      { x: -100, y: -100 },
-      { x: 200, y: 0 },
-    ];
-    herramientaDesarrolloPintarPuntos(this.mainContainer, camino, "red", 15);
-
-    this.creadorEnemigos = new CreadorUnidades({
-      contenedor: this.mainContainer,
-      cantidad: 10,
-      retrasoAparicionMS: 200,
-      unidad: Enemigo,
-      camino,
-    });
-
-    setTimeout(() => {
-      this.unidades = this.creadorEnemigos.generarGrupoUnidades();
-    }, 3000);
+    this.contenedorMonedas = new MonedasUI();
+    this.addChild(this.contenedorMonedas);
 
     const buttonAnimations = {
       hover: {
@@ -158,6 +66,7 @@ export class MainScreen extends Container {
     this.settingsButton = new FancyButton({
       defaultView: "icon-settings.png",
       anchor: 0.5,
+
       animations: buttonAnimations,
     });
     this.settingsButton.onPress.connect(() => engine().navigation.presentPopup(SettingsPopup));
@@ -176,19 +85,27 @@ export class MainScreen extends Container {
   }
 
   /** Prepare the screen just before showing */
-  public prepare() {}
+  public async prepare() {
+    const loader = new CargadorJsonNivel();
+    const level = await loader.load("/levels/level_01.json");
+
+    this.administradorJuego = new AdministradorJuego(
+      level,
+      this.mainContainer,
+      this.contenedorMonedas,
+    );
+  }
 
   /** Update the screen */
   public update(_time: Ticker) {
+    // si el juego esta en pausa no actualiza nada
     if (this.paused) return;
-    this.creadorEnemigos.update(_time);
-    const unidad1: Unidad | undefined = this.unidades ? this.unidades[9] : undefined;
-    if (this.proyectil && unidad1) {
-      const llegoADestino = MoverUnTickHaciaTarget(1, this.proyectil, unidad1.position, _time, 10);
-      if (llegoADestino) {
-        this.proyectil = undefined;
-      }
-    }
+
+    // si no hay administrador de juego mietras carga no hace nada tamposo
+    if (!this.administradorJuego) return;
+
+    // actualiza todas las unidades hechas por un Creador de Unidades
+    this.administradorJuego.update(_time);
   }
 
   /** Pause gameplay - automatically fired when a popup is presented */
@@ -221,6 +138,8 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
+    this.contenedorMonedas.x = width - this.contenedorMonedas.width - 50;
+    this.contenedorMonedas.y = 60;
     this.editMapButton.x = width - 30;
     this.editMapButton.y = 90;
   }

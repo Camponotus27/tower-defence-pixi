@@ -45,9 +45,8 @@ export class EditableMaps {
         cursor: child.cursor,
       };
 
-      // que el child sea interactivo
       child.cursor = "pointer";
-      child.eventMode = "dynamic"; // o "static" si no se mueve por sí solo
+      child.eventMode = "dynamic";
 
       const bounds = child.getLocalBounds();
       const overlay = new Graphics()
@@ -80,7 +79,6 @@ export class EditableMaps {
       };
 
       const onMove = (e: FederatedPointerEvent) => {
-        // este evento es global, pero solo mueve si ESTE es el dragTarget
         if (this.dragTarget !== child) return;
 
         const parent = child.parent;
