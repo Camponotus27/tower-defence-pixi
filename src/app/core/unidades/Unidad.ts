@@ -121,7 +121,7 @@ export class Unidad extends Container {
   }
 
   public inicializarRangoDisparo(opcionesDisparo: OpcionesDisparo) {
-    this.opcionesDisparo = opcionesDisparo;
+    this.opcionesDisparo = { ...this.opcionesDisparo, ...opcionesDisparo };
 
     if (this.opcionesDisparo?.rango) {
       this.rangoGraph = herramientaDesarrolloPintarPuntos(
@@ -136,7 +136,11 @@ export class Unidad extends Container {
   }
 
   public inicializarSeguidorDeObjetivos(opcionesSeguidorDeObjetivos: OpcionesSeguidorDeObjetivos) {
-    this.opcionesSeguidorDeObjetivos = opcionesSeguidorDeObjetivos;
+    this.opcionesSeguidorDeObjetivos = {
+      ...this.opcionesSeguidorDeObjetivos,
+      ...opcionesSeguidorDeObjetivos,
+    };
+
     this.movimiento = new Movimiento(this.opcionesSeguidorDeObjetivos?.velocidad ?? 1);
 
     const objetivos = this.opcionesSeguidorDeObjetivos?.objetivos;
@@ -246,10 +250,11 @@ export class Unidad extends Container {
     if (!opcionesDisparo?.rango) return;
 
     if (opcionesDisparo.objetivos && opcionesDisparo.objetivos.length > 0) {
-      const objetivo = obtenerObjetivoCercano(
+      const objetivo = obtenerObjetivoActualOElMasCercano(
         this.position,
         opcionesDisparo.objetivos,
         opcionesDisparo.rango,
+        this.objetivoADisparar,
       );
       this.objetivoADisparar = objetivo;
     }
@@ -336,22 +341,39 @@ export class Unidad extends Container {
   }
 }
 
-function obtenerObjetivoCercano(
+function obtenerObjetivoActualOElMasCercano(
   position: ObservablePoint,
   objetivos: Unidad[],
   rango: number,
+  objetivoActual: Unidad | undefined,
 ): Unidad | undefined {
   let objetivoCercano: Unidad | undefined;
   let distanciaObjetivoCercano = 1000000000000;
 
-  objetivos.forEach((objetivo) => {
-    if (objetivo.activo && objetivo.puedeSerObjetivoProyectil) {
-      const distanciaActual = getDistance(position.x, position.y, objetivo.x, objetivo.y);
-      if (distanciaActual < distanciaObjetivoCercano && distanciaActual <= rango) {
-        distanciaObjetivoCercano = distanciaActual;
-        objetivoCercano = objetivo;
-      }
+  if (objetivoActual && objetivoActual.puedeSerObjetivoProyectil) {
+    const distnaciaAlObjetivoActual = getDistance(
+      position.x,
+      position.y,
+      objetivoActual.x,
+      objetivoActual.y,
+    );
+    if (distnaciaAlObjetivoActual <= rango) {
+      return objetivoActual;
     }
-  });
+  }
+
+  objetivos
+    .filter((o) => {
+      return o.puedeSerObjetivoProyectil;
+    })
+    .forEach((objetivo) => {
+      if (objetivo.activo && objetivo.puedeSerObjetivoProyectil) {
+        const distanciaActual = getDistance(position.x, position.y, objetivo.x, objetivo.y);
+        if (distanciaActual < distanciaObjetivoCercano && distanciaActual <= rango) {
+          distanciaObjetivoCercano = distanciaActual;
+          objetivoCercano = objetivo;
+        }
+      }
+    });
   return objetivoCercano;
 }

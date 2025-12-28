@@ -66,7 +66,7 @@ export class AdministradorJuego {
         cantidadReservaInicial: 10,
         fabrica: () => {
           const nuevoEnemigo = new Enemigo(this.contenedorJuegoPrincipal, {
-            opcionesSeguidorDeObjetivos: { variacion: 40, velocidad: 0.3 },
+            opcionesSeguidorDeObjetivos: { variacion: 30, velocidad: 0.6 },
             vida: 100,
           });
           nuevoEnemigo.onDestruye = () => {
