@@ -1,4 +1,5 @@
 import { EsperarAction } from "../acciones/EsperarAction";
+import { GenerarEnemigosAccion } from "../acciones/GenerarEnemigosAccion";
 import { GenerarEntidadesAccion } from "../acciones/GenerarEntidadesAccion";
 import { AccionNivel } from "./ManejadorEventosNivel";
 import { EntityDef, LevelEvent, LevelJSON, PathDef } from "./SchemaNivel";
@@ -16,12 +17,15 @@ export class ConvertidorJsonANivel {
         case "spawn_entities":
           return new GenerarEntidadesAccion();
 
-        // case "spawn":
-        //   return new SpawnEnemyAction(evento.enemy, evento.path, evento.count);
+        case "spawn":
+          return new GenerarEnemigosAccion(
+            evento.count,
+            evento.interval ?? 300,
+            evento.path ?? "default",
+          );
 
         default:
-          //throw new Error(`Evento no soportado: ${evento.type}`);
-          console.log(`Evento no soportado: ${evento.type}`);
+          throw new Error(`Evento no soportado: ${evento.type}`);
       }
     });
   }

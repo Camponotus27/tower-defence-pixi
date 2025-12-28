@@ -2,54 +2,43 @@ import { ContextoNivel } from "../cargador/ContextoNivel";
 import { AccionNivel } from "../cargador/ManejadorEventosNivel";
 
 export class GenerarEnemigosAccion implements AccionNivel {
+  constructor(
+    private cantidad: number,
+    private inverval: number,
+    private camino: string,
+  ) {}
+
   getNombre(): string {
     return "GenerarEnemigosAccion";
   }
 
-  update(tiempoJuegoMS: number, contexto: ContextoNivel): boolean {
-    this.contextoJuego.entities.forEach((entidad) => {
-      switch (entidad.type) {
-        case "base_tower":
-      }
-    });
+  update(_: number, contexto: ContextoNivel): boolean {
+    for (let i = 0; i < this.cantidad; i++) {
+      setTimeout(() => {
+        const unidad = contexto.creadorEnemigos.obtener();
 
-    contexto.creadorTorres.aplicaATodasLasUnidades((u) => {
-      u.fijarObjetivosDeDisparo(contexto.creadorEnemigos.obtenerUnidades());
-    });
+        const caminoSelecionado = contexto.paths.find((c) => {
+          return c.id === this.camino;
+        });
 
-    /*contexto.paths.forEach((pathDef) => {
-          herramientaDesarrolloPintarPuntos(this.contenedorJuegoPrincipal, pathDef.points, "red", 15);
-        });*/
-
-    //this.creadorEnemigos.generarGrupoUnidadesActivas(30, 800);
-
-    manejadorDeTorres.forEach((manejador) => {
-      const baseTorre = new BaseTorre(this.contenedorJuegoPrincipal);
-      baseTorre.position = manejador.ubicacion;
-      baseTorre.generate();
-
-      baseTorre.on("pointerdown", () => {
-        if (manejador.construido === true) {
-          console.log("aqui ya hay una torre");
-          return;
-        }
-        if (this.monedas < 100) {
-          console.log("no tienes suficientes monedas");
+        if (!caminoSelecionado) {
+          contexto.mostrarMensaje("No se coneotro el camino selecinado");
           return;
         }
 
-        const torre = contexto.creadorTorres.obtener(true);
-        torre.position = manejador.ubicacion;
-        torre.generate();
+        unidad.inicializarSeguidorDeObjetivos({
+          objetivos: caminoSelecionado.points,
+        });
 
-        manejador.construido = true;
-        if (manejador.construido === true) {
-          this.monedas -= 100;
-        }
-        engine().audio.sfx.play("main/sounds/sfx-hover.wav", { volume: 0.6 });
-      });
+        unidad.generate();
+      }, i * this.inverval);
+    }
 
-      this.contenedorJuegoPrincipal.addChild(baseTorre);
+    const enemigos = contexto.creadorEnemigos.obtenerUnidades();
+    contexto.creadorTorres.aplicaATodasLasUnidades((torre) => {
+      torre.fijarObjetivosDeDisparo(enemigos);
     });
+
+    return true;
   }
 }

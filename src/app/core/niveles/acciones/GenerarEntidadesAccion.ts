@@ -17,11 +17,11 @@ export class GenerarEntidadesAccion implements AccionNivel {
 
           baseTorre.on("pointerdown", () => {
             if (baseTorre.construida === true) {
-              console.log("aqui ya hay una torre");
+              contexto.mostrarMensaje("Aqui ya hay una torre");
               return;
             }
             if (contexto.monedas < 100) {
-              console.log("no tienes suficientes monedas");
+              contexto.mostrarMensaje("No tienes suficientes monedas");
               return;
             }
 

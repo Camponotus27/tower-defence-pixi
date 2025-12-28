@@ -18,7 +18,7 @@ export interface OpcionesDisparo {
 export interface OpcionesSeguidorDeObjetivos {
   objetivos?: PointData[] | Container[];
   variacion?: number;
-  velocidad: number;
+  velocidad?: number;
   forzarActivarSeguidorCamino?: boolean;
 }
 export interface FramesJson {

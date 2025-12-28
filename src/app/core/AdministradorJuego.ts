@@ -1,6 +1,7 @@
 import { Container, Ticker } from "pixi.js";
 import { MonedasUI } from "../ui/game/MonedasUI";
 import { NotificacionesUI } from "../ui/game/NotificacionesUI";
+import { herramientaDesarrolloPintarPuntos } from "../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { ContextoNivel } from "./niveles/cargador/ContextoNivel";
 import { ConvertidorJsonANivel } from "./niveles/cargador/ConvertidorJsonANivel";
@@ -31,12 +32,19 @@ export class AdministradorJuego {
 
     const estrucuturaNivel = new ConvertidorJsonANivel(levelJSON);
 
-    this.contextoJuego = this.creacionContextoJuego(estrucuturaNivel);
+    this.contextoJuego = this.creacionContextoJuego(estrucuturaNivel, notificaciones);
+
+    this.contextoJuego.paths.forEach((pathDef) => {
+      herramientaDesarrolloPintarPuntos(this.contenedorJuegoPrincipal, pathDef.points, "red", 15);
+    });
 
     this.manejadorEventos = new ManejadorEventosNivel(estrucuturaNivel);
   }
 
-  private creacionContextoJuego(estrucutraNivel: ConvertidorJsonANivel): ContextoNivel {
+  private creacionContextoJuego(
+    estrucutraNivel: ConvertidorJsonANivel,
+    notificaciones: NotificacionesUI,
+  ): ContextoNivel {
     const creadorProyectiles = new CreadorUnidades<Proyectil>({
       contenedor: this.contenedorJuegoPrincipal,
       cantidadReservaInicial: 10,
@@ -49,6 +57,9 @@ export class AdministradorJuego {
       paths: estrucutraNivel.getCaminos(),
       entities: estrucutraNivel.getEntidades(),
       monedas: 100,
+      mostrarMensaje: (mensaje) => {
+        notificaciones.notifica(mensaje);
+      },
       creadorProyectiles: creadorProyectiles,
       creadorEnemigos: new CreadorUnidades<Enemigo>({
         contenedor: this.contenedorJuegoPrincipal,

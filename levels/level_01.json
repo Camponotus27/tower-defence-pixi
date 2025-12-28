@@ -24,8 +24,8 @@
       "id": "other",
       "points": [
         { "x": -200, "y": 200 },
-        { "x": 800, "y": -200 },
-        { "x": 500, "y": -400 }
+        { "x": 50, "y": -200 },
+        { "x": 50, "y": -400 }
       ]
     }
   ],
@@ -72,6 +72,6 @@
   "timeline": [
     { "type": "wait", "seconds": 1 },
     { "type": "spawn_entities" },
-    { "type": "spawn", "enemy": "A", "count": 5, "path": "main" }
+    { "type": "spawn", "enemy": "A", "count": 15, "path": "main" }
   ]
 }

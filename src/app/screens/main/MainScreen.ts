@@ -46,12 +46,6 @@ export class MainScreen extends Container {
 
     this.notificaciones = new NotificacionesUI(this.mainContainer);
 
-    this.administradorJuego = new AdministradorJuego(
-      this.mainContainer,
-      this.contenedorMonedas,
-      this.notificaciones,
-    );
-
     const buttonAnimations = {
       hover: {
         props: {
@@ -104,6 +98,7 @@ export class MainScreen extends Container {
       level,
       this.mainContainer,
       this.contenedorMonedas,
+      this.notificaciones,
     );
   }
 
