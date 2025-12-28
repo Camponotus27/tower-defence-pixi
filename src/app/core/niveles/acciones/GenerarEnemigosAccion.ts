@@ -1,5 +1,6 @@
 import { ContextoNivel } from "../cargador/ContextoNivel";
 import { AccionNivel } from "../cargador/ManejadorEventosNivel";
+import { PathDef } from "../cargador/SchemaNivel";
 
 export class GenerarEnemigosAccion implements AccionNivel {
   constructor(
@@ -13,18 +14,16 @@ export class GenerarEnemigosAccion implements AccionNivel {
   }
 
   update(_: number, contexto: ContextoNivel): boolean {
+    const caminoSelecionado = this.buscarCaminoParaLosEnemigos(contexto);
+    if (!caminoSelecionado) {
+      contexto.mostrarMensaje("Error: Los enemigos no tienen camino el cual seguir");
+      return true;
+    }
+
     for (let i = 0; i < this.cantidad; i++) {
+      // TODO: cambiar metodo de tiempo para que a esto no le afecta el "pausar" el juego
       setTimeout(() => {
         const unidad = contexto.creadorEnemigos.obtener();
-
-        const caminoSelecionado = contexto.paths.find((c) => {
-          return c.id === this.camino;
-        });
-
-        if (!caminoSelecionado) {
-          contexto.mostrarMensaje("No se concontró el camino selecinado");
-          return;
-        }
 
         unidad.inicializarSeguidorDeObjetivos({
           objetivos: caminoSelecionado.points,
@@ -40,5 +39,11 @@ export class GenerarEnemigosAccion implements AccionNivel {
     });
 
     return true;
+  }
+
+  private buscarCaminoParaLosEnemigos(contexto: ContextoNivel): PathDef | undefined {
+    return contexto.paths.find((c) => {
+      return c.id === this.camino;
+    });
   }
 }

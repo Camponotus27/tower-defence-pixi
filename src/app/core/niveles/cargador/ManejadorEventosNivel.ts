@@ -1,5 +1,4 @@
 import { Ticker } from "pixi.js";
-import { debugLogChanged } from "../../../utils/debugLog";
 import { ContextoNivel } from "./ContextoNivel";
 import { ConvertidorJsonANivel } from "./ConvertidorJsonANivel";
 
@@ -22,7 +21,6 @@ export class ManejadorEventosNivel {
     const accion = this.acciones[this.index];
     if (!accion) return;
     const terminada = accion.update(tiempoJuegoMS, context);
-    debugLogChanged(`action ${accion.getNombre()}`, terminada);
     if (terminada) {
       this.index++;
     }
