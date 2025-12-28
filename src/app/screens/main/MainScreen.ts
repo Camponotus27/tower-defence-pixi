@@ -12,6 +12,7 @@ import { PauseResumeOption } from "../../../engine/navigation/navigation";
 import { AdministradorJuego } from "../../core/AdministradorJuego";
 import { CargadorJsonNivel } from "../../core/niveles/cargador/CargadorJsonNivel";
 import { MonedasUI } from "../../ui/game/MonedasUI";
+import { NotificacionesUI } from "../../ui/game/NotificacionesUI";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -30,6 +31,8 @@ export class MainScreen extends Container {
 
   public editableMaps: EditableMaps;
 
+  private notificaciones: NotificacionesUI;
+
   constructor() {
     super();
 
@@ -40,6 +43,14 @@ export class MainScreen extends Container {
 
     this.contenedorMonedas = new MonedasUI();
     this.addChild(this.contenedorMonedas);
+
+    this.notificaciones = new NotificacionesUI(this.mainContainer);
+
+    this.administradorJuego = new AdministradorJuego(
+      this.mainContainer,
+      this.contenedorMonedas,
+      this.notificaciones,
+    );
 
     const buttonAnimations = {
       hover: {
@@ -142,6 +153,8 @@ export class MainScreen extends Container {
     this.contenedorMonedas.y = 60;
     this.editMapButton.x = width - 30;
     this.editMapButton.y = 90;
+
+    this.notificaciones.resize(centerX, centerY);
   }
 
   /** Show screen with animations */
