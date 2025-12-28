@@ -22,7 +22,7 @@ export class GenerarEnemigosAccion implements AccionNivel {
         });
 
         if (!caminoSelecionado) {
-          contexto.mostrarMensaje("No se coneotro el camino selecinado");
+          contexto.mostrarMensaje("No se concontró el camino selecinado");
           return;
         }
 

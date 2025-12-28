@@ -38,16 +38,6 @@ export class GenerarEntidadesAccion implements AccionNivel {
       }
     });
 
-    contexto.creadorTorres.aplicaATodasLasUnidades((u) => {
-      u.fijarObjetivosDeDisparo(contexto.creadorEnemigos.obtenerUnidades());
-    });
-
-    /*contexto.paths.forEach((pathDef) => {
-          herramientaDesarrolloPintarPuntos(this.contenedorJuegoPrincipal, pathDef.points, "red", 15);
-        });*/
-
-    //this.creadorEnemigos.generarGrupoUnidadesActivas(30, 800);
-
     return true;
   }
 }
