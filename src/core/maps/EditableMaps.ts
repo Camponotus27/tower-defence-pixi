@@ -90,6 +90,7 @@ export class EditableMaps {
 
       const onUp = () => {
         if (this.dragTarget === child) {
+          console.log("this.dragTarget.position", this.dragTarget.position);
           this.dragTarget = undefined;
         }
         child.cursor = "pointer";
