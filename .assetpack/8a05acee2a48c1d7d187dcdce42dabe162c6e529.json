@@ -6,8 +6,8 @@
             "inheritedMetaData": {},
             "transformData": {},
             "stats": {
-                "date": 1769126867600,
-                "duration": 3.1669579995796084,
+                "date": 1769436109033,
+                "duration": 0.7539999999999054,
                 "success": true
             }
         },
@@ -20,8 +20,8 @@
             "inheritedMetaData": {},
             "transformData": {},
             "stats": {
-                "date": 1769126867600,
-                "duration": 3.1408329997211695,
+                "date": 1769436109033,
+                "duration": 2.085749999999962,
                 "success": true
             }
         },
@@ -34,34 +34,10 @@
             },
             "transformData": {},
             "stats": {
-                "date": 1768316336811,
-                "duration": 6.071333000436425,
+                "date": 1769436109033,
+                "duration": 2.045957999999928,
                 "success": true
             }
-        },
-        "/Users/s0c0kww/go/src/github.com/pixi-project/raw-assets/main{m}/background/fondo_test_1.webp": {
-            "isFolder": false,
-            "parent": "/Users/s0c0kww/go/src/github.com/pixi-project/raw-assets/main{m}/background",
-            "metaData": {},
-            "inheritedMetaData": {
-                "m": true
-            },
-            "transformData": {},
-            "stats": {
-                "date": 1768252561978,
-                "duration": 9.336749999999938,
-                "success": true
-            },
-            "hash": "3Ke3ow"
-        },
-        "/Users/s0c0kww/go/src/github.com/pixi-project/public/assets/main/background/fondo_test_1.webp": {
-            "isFolder": false,
-            "transformParent": "/Users/s0c0kww/go/src/github.com/pixi-project/raw-assets/main{m}/background/fondo_test_1.webp",
-            "metaData": {},
-            "inheritedMetaData": {
-                "m": true
-            },
-            "transformData": {}
         },
         "/Users/s0c0kww/go/src/github.com/pixi-project/raw-assets/main{m}/background/fondo_test_2.png": {
             "isFolder": false,

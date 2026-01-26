@@ -10,6 +10,7 @@ export class ContextoNivel {
     public paths: PathDef[],
     public entities: EntityDef[],
     public monedas: number,
+    public vidas: number,
     public mostrarMensaje: (mensaje: string) => void,
     public creadorEnemigos: CreadorUnidades<Enemigo>,
     public creadorBaseTorres: CreadorUnidades<BaseTorre>,

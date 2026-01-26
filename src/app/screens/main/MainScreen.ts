@@ -12,6 +12,7 @@ import { PauseResumeOption } from "../../../engine/navigation/navigation";
 import { AdministradorJuego } from "../../core/AdministradorJuego";
 import { MonedasUI } from "../../ui/game/MonedasUI";
 import { NotificacionesUI } from "../../ui/game/NotificacionesUI";
+import { VidasUI } from "../../ui/game/VidasUI";
 
 export const MAP_WIDTH = 1600;
 export const MAP_HEIGHT = 1080;
@@ -28,6 +29,7 @@ export class MainScreen extends Container {
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
   private contenedorMonedas: MonedasUI;
+  private contenedorVida: VidasUI;
   private cameraX = 0;
   private cameraY = 0;
   private viewportWidth = 0;
@@ -72,6 +74,10 @@ export class MainScreen extends Container {
     this.cameraContainer.hitArea = new Rectangle(0, 0, MAP_WIDTH, MAP_HEIGHT);
 
     this.cameraContainer.on("pointerdown", (e) => {
+      if (this.editableMaps.isEditing) {
+        return;
+      }
+
       this.isDragging = true;
 
       this.dragStartX = e.global.x;
@@ -82,7 +88,7 @@ export class MainScreen extends Container {
     });
 
     this.cameraContainer.on("pointermove", (e) => {
-      if (!this.isDragging) return;
+      if (this.editableMaps.isEditing || !this.isDragging) return;
 
       const dx = e.global.x - this.dragStartX;
       const dy = e.global.y - this.dragStartY;
@@ -104,11 +110,15 @@ export class MainScreen extends Container {
     this.contenedorMonedas = new MonedasUI();
     this.addChild(this.contenedorMonedas);
 
+    this.contenedorVida = new VidasUI();
+    this.addChild(this.contenedorVida);
+
     this.notificaciones = new NotificacionesUI(this.mainContainer);
 
     this.administradorJuego = new AdministradorJuego(
       this.worldContainer,
       this.contenedorMonedas,
+      this.contenedorVida,
       this.notificaciones,
       asignarBackgroud,
     );
@@ -213,6 +223,8 @@ export class MainScreen extends Container {
     this.settingsButton.y = 30;
     this.contenedorMonedas.x = width - this.contenedorMonedas.width - 50;
     this.contenedorMonedas.y = 60;
+    this.contenedorVida.x = width - this.contenedorVida.width - 50;
+    this.contenedorVida.y = 100;
     this.editMapButton.x = width - 30;
     this.editMapButton.y = 90;
 

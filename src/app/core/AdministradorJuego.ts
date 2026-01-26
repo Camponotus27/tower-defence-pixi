@@ -1,6 +1,7 @@
 import { Assets, Container, Ticker } from "pixi.js";
 import { MonedasUI } from "../ui/game/MonedasUI";
 import { NotificacionesUI } from "../ui/game/NotificacionesUI";
+import { VidasUI } from "../ui/game/VidasUI";
 import { herramientaDesarrolloPintarPuntos } from "../utils/herramietasDesarrollo";
 import { CreadorUnidades } from "./CreadorUnidades";
 import { ContextoNivel } from "./niveles/cargador/ContextoNivel";
@@ -20,18 +21,23 @@ export class AdministradorJuego {
   private contextoJuego: ContextoNivel;
 
   private monedasUI: MonedasUI;
+  private vidaUI: VidasUI;
 
   constructor(
     mainContainerScreen: Container,
     monedasUI: MonedasUI,
+    vidaUI: VidasUI,
     notificaciones: NotificacionesUI,
     asignarBackgroud: (imagenBackgroud: string) => void,
   ) {
     this.contenedorJuegoPrincipal = mainContainerScreen;
     this.monedasUI = monedasUI;
+    this.vidaUI = vidaUI;
 
     const jsonLevel = Assets.get<LevelJSON>("level_01.json");
     const estrucuturaNivel = new ConvertidorJsonANivel(jsonLevel);
+
+    this.vidaUI.asignarVida(estrucuturaNivel.getlive());
 
     asignarBackgroud(estrucuturaNivel.getBackgroud());
 
@@ -60,6 +66,7 @@ export class AdministradorJuego {
       paths: estrucutraNivel.getCaminos(),
       entities: estrucutraNivel.getEntidades(),
       monedas: estrucutraNivel.getMonedas(),
+      vidas: estrucutraNivel.getlive(),
       mostrarMensaje: (mensaje) => {
         notificaciones.notifica(mensaje);
       },

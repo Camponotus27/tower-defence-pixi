@@ -20,7 +20,7 @@ const pauseResumeOption: PauseResumeOption = { ignoreInteractiveChildren: true }
 
 export class EditableMaps {
   private editMap = new WeakMap<Container, EditorHandlers>();
-  private isEditing: boolean = false;
+  public isEditing: boolean = false;
   private host: AppScreen;
 
   private dragTarget?: Container;

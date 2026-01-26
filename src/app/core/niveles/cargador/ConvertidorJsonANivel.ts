@@ -75,6 +75,9 @@ export class ConvertidorJsonANivel {
   public getBackgroud(): string {
     return this.levelJson.background?.texture || "default.png";
   }
+  public getlive(): number {
+    return this.levelJson.initialState.lives || 100;
+  }
 
   private defaultTimeLine(): LevelEvent {
     return {
